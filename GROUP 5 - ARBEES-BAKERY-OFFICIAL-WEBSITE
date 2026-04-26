@@ -1,0 +1,136 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// ─────────────────────────────────────────────
+//  User class
+// ─────────────────────────────────────────────
+class User {
+    String name;
+    String email;
+    String password;
+    String address;
+
+    public User(String name, String email, String password, String address) {
+        this.name     = name;
+        this.email    = email;
+        this.password = password;
+        this.address  = address;
+    }
+}
+
+// ─────────────────────────────────────────────
+//  OrderItem class
+// ─────────────────────────────────────────────
+class OrderItem {
+    String itemName;
+    int    quantity;
+    double price;
+    double total;
+
+    public OrderItem(String itemName, int quantity, double price) {
+        this.itemName = itemName;
+        this.quantity = quantity;
+        this.price    = price;
+        this.total    = price * quantity;
+    }
+}
+
+// ─────────────────────────────────────────────
+//  OrderRecord — one full completed order
+// ─────────────────────────────────────────────
+class OrderRecord {
+    String               orderRef;
+    String               customerName;
+    String               customerEmail;
+    String               deliveryAddress;
+    String               paymentMethod;
+    String               timestamp;
+    String               status;
+    ArrayList<OrderItem> items;
+    double               grandTotal;
+
+    public OrderRecord(String orderRef, String customerName, String customerEmail,
+                       String deliveryAddress, String paymentMethod,
+                       String timestamp, ArrayList<OrderItem> items, double grandTotal) {
+        this.orderRef        = orderRef;
+        this.customerName    = customerName;
+        this.customerEmail   = customerEmail;
+        this.deliveryAddress = deliveryAddress;
+        this.paymentMethod   = paymentMethod;
+        this.timestamp       = timestamp;
+        this.status          = "Pending";
+        this.items           = new ArrayList<>(items);
+        this.grandTotal      = grandTotal;
+    }
+}
+
+// ─────────────────────────────────────────────
+//  Main application
+// ─────────────────────────────────────────────
+public class ArbeesBakery {
+
+    static Scanner                sc           = new Scanner(System.in);
+    static ArrayList<User>        users        = new ArrayList<>();
+    static ArrayList<OrderItem>   cart         = new ArrayList<>();
+    static ArrayList<OrderRecord> orderHistory = new ArrayList<>();
+    static User                   loggedIn     = null;
+    static int                    orderCounter = 1000;
+
+    // ── Admin credentials ──────────────────────
+    static final String ADMIN_USER = "admin";
+    static final String ADMIN_PASS = "admin123";
+
+    // ── Menu data ──────────────────────────────
+    static ArrayList<String> itemNames  = new ArrayList<>();
+    static ArrayList<Double> itemPrices = new ArrayList<>();
+
+    static {
+        String[] names = {
+            "Pandesal", "Monay", "Ensaymada",
+            "Spanish Bread", "Egg Bread", "Torta", "Star Bread",
+            "Francis", "Ube Cheese Pandesal", "Choco German",
+            "Siacoy", "Doughnut", "Banana Bread", "Slice Bread", "Chiffon Cake"
+        };
+        double[] prices = {
+            5.00, 6.00, 6.00, 7.00, 10.00, 10.00, 6.00,
+            6.00, 8.00, 6.00, 6.00, 6.00, 55.00, 65.00, 250.00
+        };
+        for (int i = 0; i < names.length; i++) {
+            itemNames.add(names[i]);
+            itemPrices.add(prices[i]);
+        }
+    }
+
+    // ══════════════════════════════════════════
+    //  ENTRY POINT
+    // ══════════════════════════════════════════
+    public static void main(String[] args) {
+        printBanner();
+        viewMenu();
+        homeMenu();
+        System.out.println("\n  Thank you for visiting ARBEE'S BAKERY! Goodbye!");
+    }
+
+    // ══════════════════════════════════════════
+    //  BANNER
+    // ══════════════════════════════════════════
+    static void printBanner() {
+        System.out.println();
+        System.out.println("  ╔══════════════════════════════════════════╗");
+        System.out.println("  ║                                          ║");
+        System.out.println("  ║          ARBEE'S BAKERY                  ║");
+        System.out.println("  ║     Freshly Baked Goodness Every Day     ║");
+        System.out.println("  ║                                          ║");
+        System.out.println("  ╚══════════════════════════════════════════╝");
+    }
+
+    // ══════════════════════════════════════════
+    //  VIEW MENU
+    // ══════════════════════════════════════════
+    static void viewMenu() {
+        System.out.println("\n╔═════════════════════════════════════════════╗");
+        System.out.println("║          ARBEE'S BAKERY MENU                ║");
+        System.out.println("╠═════╦═══════════════════════╦═══════════════╣");
+        System.out.println("║ No. ║ Item       
